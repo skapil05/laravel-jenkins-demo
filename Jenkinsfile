@@ -11,16 +11,28 @@ pipeline {
             }
         }
 
-        stage('Workspace') {
+        stage('Composer Validate') {
             steps {
-                sh 'pwd'
-                sh 'ls -la'
+                sh 'composer validate'
             }
         }
 
-        stage('PHP') {
+        stage('Composer Install') {
             steps {
-                sh 'php -v'
+                sh 'composer install --no-interaction --prefer-dist'
+            }
+        }
+
+        stage('Prepare Laravel') {
+            steps {
+                sh 'cp .env.example .env'
+                sh 'php artisan key:generate'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                sh 'php artisan test'
             }
         }
 
