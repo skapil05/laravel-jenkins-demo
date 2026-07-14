@@ -45,5 +45,10 @@ pipeline {
         '''
              }
         }
+        stage('Approval') {
+    steps {
+        input 'Deploy to Production?'
+    }
+}
     }
 }
