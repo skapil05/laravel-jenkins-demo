@@ -35,7 +35,13 @@ pipeline {
                 sh 'php artisan test'
             }
         }
-
+        stage('Deploy Staging') {
+    steps {
+        sh '''
+        rsync -av --delete \
+        --exclude=.git \
+        --exclude=vendor \
+        ./ /var/www/laravel-demo/
+        '''
     }
-
 }
