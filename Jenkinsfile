@@ -50,5 +50,16 @@ pipeline {
         input 'Deploy to Production?'
     }
 }
+
+      stage('Deploy Production') {
+    steps {
+        sh '''
+        rsync -av --delete \
+        --exclude=.git \
+        --exclude=vendor \
+        ./ /var/www/laravel-production/
+        '''
+    }
+}
     }
 }
