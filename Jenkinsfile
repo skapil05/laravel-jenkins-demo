@@ -43,5 +43,7 @@ pipeline {
         --exclude=vendor \
         ./ /var/www/laravel-demo/
         '''
+             }
+        }
     }
 }
