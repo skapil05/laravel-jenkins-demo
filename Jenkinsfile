@@ -6,7 +6,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                echo 'Downloading source code...'
+                echo 'Downloading latest source code...'
                 checkout scm
             }
         }
@@ -17,16 +17,9 @@ pipeline {
             }
         }
 
-        stage('Composer Install') {
+        stage('Composer Install (Build)') {
             steps {
                 sh 'composer install --no-interaction --prefer-dist'
-            }
-        }
-
-        stage('Prepare Laravel') {
-            steps {
-                sh 'cp .env.example .env'
-                sh 'php artisan key:generate'
             }
         }
 
@@ -35,44 +28,51 @@ pipeline {
                 sh 'php artisan test'
             }
         }
+
         stage('Deploy Staging') {
-    steps {
-        sh '''
-        rsync -av --delete \
-        --exclude=.git \
-        ./ /var/www/laravel-demo/
-         cd /var/www/laravel-demo
+            steps {
+                sh '''
+                rsync -av --delete \
+                --exclude=.git \
+                --exclude=.env \
+                --exclude=vendor \
+                ./ /var/www/laravel-demo/
 
-        composer install --no-dev --optimize-autoloader
+                cd /var/www/laravel-demo
 
-        php artisan migrate --force
+                composer install --no-dev --optimize-autoloader
 
-        php artisan optimize
-        '''
-             }
+                php artisan migrate --force
+
+                php artisan optimize
+                '''
+            }
         }
 
         stage('Approval') {
-    steps {
-        input 'Deploy to Production?'
-    }
-}
+            steps {
+                input 'Deploy to Production?'
+            }
+        }
 
-      stage('Deploy Production') {
-    steps {
-        sh '''
-        rsync -av --delete \
-        --exclude=.git \
-        ./ /var/www/laravel-production/
-        cd /var/www/laravel-production
+        stage('Deploy Production') {
+            steps {
+                sh '''
+                rsync -av --delete \
+                --exclude=.git \
+                --exclude=.env \
+                --exclude=vendor \
+                ./ /var/www/laravel-production/
 
-        composer install --no-dev --optimize-autoloader
+                cd /var/www/laravel-production
 
-        php artisan migrate --force
+                composer install --no-dev --optimize-autoloader
 
-        php artisan optimize
-        '''
-    }
-}
+                php artisan migrate --force
+
+                php artisan optimize
+                '''
+            }
+        }
     }
 }
