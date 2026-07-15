@@ -49,6 +49,7 @@ pipeline {
          steps {
          sh '''
       cd /var/www/laravel-demo
+      touch database/database.sqlite
       php artisan optimize:clear
       '''
 }
