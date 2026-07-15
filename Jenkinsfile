@@ -66,6 +66,13 @@ pipeline {
         rsync -av --delete \
         --exclude=.git \
         ./ /var/www/laravel-production/
+        cd /var/www/laravel-production
+
+        composer install --no-dev --optimize-autoloader
+
+        php artisan migrate --force
+
+        php artisan optimize
         '''
     }
 }
