@@ -45,6 +45,15 @@ pipeline {
         '''
              }
         }
+
+        stage ('optimize laravel') {
+         steps {
+         sh '''
+      cd /var/www/laravel-demo
+      php arisan optimize:clear
+      '''
+}
+}
         stage('Approval') {
     steps {
         input 'Deploy to Production?'
