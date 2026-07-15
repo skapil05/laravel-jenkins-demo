@@ -41,19 +41,17 @@ pipeline {
         rsync -av --delete \
         --exclude=.git \
         ./ /var/www/laravel-demo/
+         cd /var/www/laravel-demo
+
+        composer install --no-dev --optimize-autoloader
+
+        php artisan migrate --force
+
+        php artisan optimize
         '''
              }
         }
 
-        stage ('optimize laravel') {
-         steps {
-         sh '''
-      cd /var/www/laravel-demo
-      touch database/database.sqlite
-      php artisan optimize:clear
-      '''
-}
-}
         stage('Approval') {
     steps {
         input 'Deploy to Production?'
