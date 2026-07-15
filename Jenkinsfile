@@ -50,7 +50,7 @@ pipeline {
          steps {
          sh '''
       cd /var/www/laravel-demo
-      php arisan optimize:clear
+      php artisan optimize:clear
       '''
 }
 }
