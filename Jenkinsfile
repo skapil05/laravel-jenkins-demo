@@ -40,7 +40,6 @@ pipeline {
         sh '''
         rsync -av --delete \
         --exclude=.git \
-        --exclude=vendor \
         ./ /var/www/laravel-demo/
         '''
              }
@@ -65,7 +64,6 @@ pipeline {
         sh '''
         rsync -av --delete \
         --exclude=.git \
-        --exclude=vendor \
         ./ /var/www/laravel-production/
         '''
     }
