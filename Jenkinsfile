@@ -1,9 +1,18 @@
 pipeline {
 
     agent any
-
+    environment {
+        DEMO_KEY = credentials('demo-api-key')
+}
     stages {
 
+        stage('credentials Demo') {
+          steps {
+            sh'''
+           echo "Credential loaded"
+           echo $DEMO_KEY
+}
+}
         stage('Checkout') {
             steps {
                 echo 'Downloading latest source code...'
