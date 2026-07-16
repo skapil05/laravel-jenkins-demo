@@ -11,6 +11,7 @@ pipeline {
             sh'''
            echo "Credential loaded"
            echo $DEMO_KEY
+           '''
 }
 }
         stage('Checkout') {
